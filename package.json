@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "import": "tsx scripts/import.ts"
+    "import": "tsx scripts/import.ts",
+    "import:mbox": "tsx scripts/import-mbox.ts",
+    "import:utzoo": "tsx scripts/import-utzoo.ts",
+    "resplit": "tsx scripts/resplit.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",
