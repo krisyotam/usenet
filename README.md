@@ -37,12 +37,21 @@ npm run import /path/to/usenet/archive
 # Re-split concatenated blobs (if importing raw Google Groups data)
 npx tsx scripts/resplit.ts
 
+# Build the subject/author index (after any import; ~25s, safe to re-run)
+npm run index:meta
+
 # Run dev server
 npm run dev
 
 # Production
 npm run build && npm start
 ```
+
+## Search syntax
+
+`word`, `"exact phrase"`, `prefix*`, `-exclude`, `a OR b`, `from:pike`, `subject:minix`,
+`group:comp.os.plan9`, `after:1990`, `before:1992-06`. Sort by best match, newest or oldest.
+Keyboard: `j`/`k` next/prev, `u` up, `/` search. See `/help`.
 
 ## Schema
 
@@ -66,6 +75,7 @@ CREATE TABLE messages (
 );
 
 CREATE VIRTUAL TABLE messages_fts USING fts5(body, content='messages', content_rowid='id');
+CREATE VIRTUAL TABLE meta_fts USING fts5(subject, from_addr, content='messages', content_rowid='id');
 ```
 
 ## License

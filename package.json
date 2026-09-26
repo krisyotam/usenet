@@ -9,7 +9,8 @@
     "import": "tsx scripts/import.ts",
     "import:mbox": "tsx scripts/import-mbox.ts",
     "import:utzoo": "tsx scripts/import-utzoo.ts",
-    "resplit": "tsx scripts/resplit.ts"
+    "resplit": "tsx scripts/resplit.ts",
+    "index:meta": "tsx scripts/index-meta.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",
@@ -24,5 +25,9 @@
     "@types/react-dom": "^19",
     "tsx": "^4.21.0",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.9.0": true,
+    "esbuild@0.27.7": true
   }
 }
