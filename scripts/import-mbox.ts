@@ -19,7 +19,7 @@
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
+import { readZippedMbox } from "./archive";
 
 const args = process.argv.slice(2);
 const replace = args.includes("--replace");
@@ -223,10 +223,7 @@ function importMboxFile(filePath: string): void {
   if (filePath.endsWith(".mbox.zip")) {
     // Unzip to stdout
     try {
-      content = execSync(`unzip -p "${filePath}"`, {
-        maxBuffer: 1024 * 1024 * 1024, // 1GB
-        encoding: "utf-8",
-      });
+      content = readZippedMbox(filePath);
     } catch (e: any) {
       // unzip may return exit code 1 for warnings but still output data
       if (e.stdout && e.stdout.length > 100) {

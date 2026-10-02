@@ -23,7 +23,8 @@
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
+import os from "os";
+import { extractTape } from "./archive";
 
 const args = process.argv.slice(2);
 const replace = args.includes("--replace");
@@ -210,14 +211,11 @@ function processTape(tarPath: string): Map<string, ParsedArticle[]> {
   const isAnews = tapeName === "news001f1";
 
   // Extract all files to a temp directory
-  const tmpDir = `/tmp/utzoo-extract-${Date.now()}`;
-  fs.mkdirSync(tmpDir, { recursive: true });
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "utzoo-extract-"));
 
   try {
     try {
-      execSync(`tar xjf "${tarPath}" -C "${tmpDir}" 2>/dev/null`, {
-        maxBuffer: 500 * 1024 * 1024,
-      });
+      extractTape(tarPath, tmpDir);
     } catch {
       console.log(`  ${tapeName}: extraction failed, skipping`);
       return groups;
@@ -257,7 +255,7 @@ function processTape(tarPath: string): Map<string, ParsedArticle[]> {
       `  ${tapeName}: ${processed} articles across ${groups.size} groups`
     );
   } finally {
-    execSync(`rm -rf "${tmpDir}"`);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 
   return groups;
